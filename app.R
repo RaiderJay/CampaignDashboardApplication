@@ -2,10 +2,7 @@
 # This is a Shiny web application. You can run the application by clicking
 # the 'Run App' button above.
 #
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+
 
 #install.packages("shinydashboard")
 #install.packages("sys")
@@ -34,88 +31,47 @@ PeopleApproach = vistime(peopleDF, col.event = "IMO_Name", col.group = "Sub_LOE"
 WinApproach = vistime(winDF, col.event = "IMO_Name", col.group = "Sub_LOE", title = "OP Approach: Win", col.start = "start_date", col.end = "end_date")
 InnovateApproach = vistime(innovateDF, col.event = "IMO_Name", col.group = "Sub_LOE", title = "OP Approach: Innovate", col.start = "start_date", col.end = "end_date")
 
+Qrt1Speed <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = 4,
+  title = list(text = "Quarter 1 FY 23 IMO Performance"),
+  type = "indicator",
+  mode = "gauge+number+delta",
+  delta = list(reference = 0),
+  gauge = list(
+    axis =list(range = list(NULL, 10)),
+    bar = list(color = "darkblue"),
+    steps = list(
+      list(range = c(0, 3), color = "red"),
+      list(range = c(3, 7), color = "orange"),
+      list(range = c(7, 10), color = "green")),
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 4))) 
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
   dashboardSidebar(
-    
+    actionButton("Dashboard","Dashboard"),
+    actionButton("DataInput","Data Input")
   ),
-  dashboardBody(
-
-    
-    tags$head(tags$style(HTML('
-                          /* logo */
-                          .skin-blue .main-header .logo {
-                          background-color: rgb(68, 76, 56); color: rgb(255,255,255);
-                          font-weight: bold;font-size: 18px;text-align: Right;
-                          }
-
-                          /* logo when hovered */
-
-                          .skin-blue .main-header .logo:hover {
-                          background-color: rgb(63, 71, 51);
-                          }
-
-
-                          /* navbar (rest of the header) */
-                          .skin-blue .main-header .navbar {
-                          background-color: rgb(68, 76, 56);
-                          }
-
-                          /* main sidebar */
-                          .skin-blue .main-sidebar {
-                          background-color: rgb(0,0,0);
-                          }
-
-                          /* main body */
-                          .skin-blue .main-body {
-                          background-color: rgb(0,0,0);
-                          }
-
-                          /* active selected tab in the sidebarmenu */
-                          .skin-blue .main-sidebar .sidebar .sidebar-menu .active a{
-                          background-color: rgb(107,194,0);
-                          color: rgb(255,255,255);font-weight: bold;font-size: 18px;
-                          }
-
-                          /* other links in the sidebarmenu */
-                          .skin-blue .main-sidebar .sidebar .sidebar-menu a{
-                          background-color: rgb(255,125,125);
-                          color: rgb(255,255,255);font-weight: bold;
-                          }
-
-                          /* other links in the sidebarmenu when hovered */
-                          .skin-blue .main-sidebar .sidebar .sidebar-menu a:hover{
-                          background-color: rgb(232,245,251);color: rgb(0,144,197);font-weight: bold;
-                          }
-
-                          /* toggle button color  */
-                          .skin-blue .main-header .navbar .sidebar-toggle{
-                          background-color: rgb(73, 81, 61);color:rgb(0,0,0);
-                          }
-
-                          /* toggle button when hovered  */
-                          .skin-blue .main-header .navbar .sidebar-toggle:hover{
-                          background-color: rgb(63, 71, 51);color:rgb(255,255,255);
-                          }
-
-                           '))),
-    
-    
+  dashboardBody( 
+    tags$head( tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css")),
     tabsetPanel(
       tabPanel(h4("Campaign Overview"),
                tabsetPanel(
-                 tabPanel("Op Approach",
+                 tabPanel("Operational Approach",
                           opApproach,
-                          #p <- plot_ly(),
-                          #opApproach,
-                          #sliderInput("DatesMerge","Dates:",
-                          #            min = Sys.Date() - 30,
-                          #            max = as.Date("2024-10-01","%Y-%m-%d"),    
-                          #            value= c(Sys.Date(),Sys.Date() + 180),
-                          #            timeFormat="%Y-%m-%d")
+                          sliderInput("DatesMerge","Dates:",
+                                      min = Sys.Date() - 30,
+                                      max = as.Date("2024-10-01","%Y-%m-%d"),
+                                      value= c(Sys.Date(),Sys.Date() + 180),
+                                      timeFormat="%Y-%m-%d")
                  ),
-                 tabPanel("Assesments")
+                 tabPanel("Assesments",
+                          #tags$img(src = "/images/300.jpeg", alt = "logo"),
+                          Qrt1Speed)
                )),
       tabPanel(h4("People LOE"),
                tabsetPanel(
@@ -143,9 +99,6 @@ ui <- dashboardPage(
 )
 
 server <- function(input, output) {
-  output$plot11 <- renderPlot({
-    hist(rnorm(cases[[input$case]][input$num]))
-  })
 }
 
 
