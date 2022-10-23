@@ -1,15 +1,16 @@
-IMO_Name,Originator,LOE,Sub_LOE,start_date,end_date
-get Robo Cop,G1,People,manning,2022-10-30,2022-11-13
-Develop Iron Man MOS,G1,People,manning,2022-11-01,2023-02-03
-develop thick skin,HPW,People,resiliency ,2022-10-24,2022-12-12
-Be Awesome,Chaplain,People,culture & community,2023-01-01,2023-03-02
-Going full Rambo,G35,Win,Optimize for IW,2022-10-30,2022-11-13
-Space Cyber Exercise,G37,Win,"Ops, Training, & Exp",2023-01-01,2023-03-02
-"HQ, HQ, HQ",40-25,Win,C & C HQs,2022-10-30,2022-11-13
-Ghost in the Machine,8th POG,Win,Value Messaging,2022-10-30,2022-11-13
-Biggest Data,G9,Win,Optimized for IA,2022-10-24,2022-12-12
-Spy vs Spy,G2,Win,Protection,2022-10-30,2022-11-13
-Thats a Good Cap,G8,Innovate,Cap Analysis,2022-10-30,2022-11-13
-Liquid Paper on a Bee,G8,Innovate,Emerging Solutions,2022-10-24,2022-12-12
-Optimus Prime at AOB,G8,Innovate,Transformation,2023-01-01,2023-03-02
-recruit spiderman,G1,People,manning,2022-11-16,2023-03-01
+IMO_ID,IMO_Name,Originator,LOE,Sub_LOE,start_date,end_date,depends_on,completed
+0,Battle Rhythm Event ,NA,Event,1SFC,2022-10-30,2022-11-30,NA,NA
+1,get Robo Cop,G1,People,manning,2022-10-30,2022-11-13,NA,TRUE
+2,Develop Iron Man MOS,G1,People,manning,2022-11-01,2023-02-03,1,FALSE
+3,develop thick skin,HPW,People,resiliency ,2022-10-24,2022-12-12,NA,FALSE
+4,Be Awesome,Chaplain,People,culture & community,2023-01-01,2023-03-02,NA,FALSE
+5,Going full Rambo,G35,Win,Optimize for IW,2022-10-30,2022-11-13,NA,TRUE
+6,Space Cyber Exercise,G37,Win,"Ops, Training, & Exp",2023-01-01,2023-03-02,NA,FALSE
+7,"HQ, HQ, HQ",40-25,Win,C & C HQs,2022-10-30,2022-11-13,NA,TRUE
+8,Ghost in the Machine,8th POG,Win,Value Messaging,2022-10-30,2022-11-13,NA,TRUE
+9,Biggest Data,G9,Win,Optimized for IA,2022-10-24,2022-12-12,NA,FALSE
+10,Spy vs Spy,G2,Win,Protection,2022-10-30,2022-11-13,NA,TRUE
+11,Thats a Good Cap,G8,Innovate,Cap Analysis,2022-10-30,2022-11-13,NA,TRUE
+12,Liquid Paper on a Bee,G8,Innovate,Emerging Solutions,2022-10-24,2022-12-12,NA,FALSE
+13,Optimus Prime at AOB,G8,Innovate,Transformation,2023-01-01,2023-03-02,NA,FALSE
+14,recruit spiderman,G1,People,manning,2022-11-16,2023-03-01,NA,FALSE

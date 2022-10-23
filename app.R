@@ -3,7 +3,6 @@
 # the 'Run App' button above.
 #
 
-
 #install.packages("shinydashboard")
 #install.packages("sys")
 #install.packages("plotly")
@@ -25,30 +24,116 @@ winDF <- df[which(df$LOE == "Win"),]
 peopleDF <- df[which(df$LOE == "People"),]
 innovateDF <- df[which(df$LOE == "Innovate"),]
 
+TotalComplete <- sum(na.omit(df$completed))
+TotalIMOs <- length(na.omit(df$completed))
+
 
 opApproach = vistime(df, col.event = "IMO_Name", col.group = "LOE", title = "OP Approach", col.start = "start_date", col.end = "end_date")
 PeopleApproach = vistime(peopleDF, col.event = "IMO_Name", col.group = "Sub_LOE", title = "OP Approach: People", col.start = "start_date", col.end = "end_date")
 WinApproach = vistime(winDF, col.event = "IMO_Name", col.group = "Sub_LOE", title = "OP Approach: Win", col.start = "start_date", col.end = "end_date")
 InnovateApproach = vistime(innovateDF, col.event = "IMO_Name", col.group = "Sub_LOE", title = "OP Approach: Innovate", col.start = "start_date", col.end = "end_date")
 
-Qrt1Speed <- plot_ly(
+TotalSpeed <- plot_ly(
   domain = list(x = c(0, 1), y = c(0, 1)),
-  value = 4,
-  title = list(text = "Quarter 1 FY 23 IMO Performance"),
+  value = TotalComplete,
+  title = list(text = "Campaign IMO Performance"),
   type = "indicator",
   mode = "gauge+number+delta",
   delta = list(reference = 0),
   gauge = list(
-    axis =list(range = list(NULL, 10)),
+    axis =list(range = list(NULL, TotalIMOs)),
     bar = list(color = "darkblue"),
     steps = list(
-      list(range = c(0, 3), color = "red"),
-      list(range = c(3, 7), color = "orange"),
-      list(range = c(7, 10), color = "green")),
+      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
+      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
+      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
+      ),
     threshold = list(
       line = list(color = "red", width = 4),
       thickness = 0.75,
-      value = 4))) 
+      value = TotalComplete))) 
+
+qrt1Speed<- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = TotalComplete,
+  title = list(text = "Qrt1 IMO Performance"),
+  type = "indicator",
+  mode = "gauge+number+delta",
+  delta = list(reference = 0),
+  gauge = list(
+    axis =list(range = list(NULL, TotalIMOs)),
+    bar = list(color = "darkblue"),
+    steps = list(
+      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
+      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
+      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
+    ),
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = TotalComplete)))
+
+qrt2Speed<- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = TotalComplete,
+  title = list(text = "Qrt2 IMO Performance"),
+  type = "indicator",
+  mode = "gauge+number+delta",
+  delta = list(reference = 0),
+  gauge = list(
+    axis =list(range = list(NULL, TotalIMOs)),
+    bar = list(color = "darkblue"),
+    steps = list(
+      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
+      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
+      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
+    ),
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = TotalComplete))) 
+
+qrt3Speed<- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = TotalComplete,
+  title = list(text = "Qrt3 IMO Performance"),
+  type = "indicator",
+  mode = "gauge+number+delta",
+  delta = list(reference = 0),
+  gauge = list(
+    axis =list(range = list(NULL, TotalIMOs)),
+    bar = list(color = "darkblue"),
+    steps = list(
+      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
+      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
+      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
+    ),
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = TotalComplete))) 
+
+qrt4Speed<- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = TotalComplete,
+  title = list(text = "Qrt4 IMO Performance"),
+  type = "indicator",
+  mode = "gauge+number+delta",
+  delta = list(reference = 0),
+  gauge = list(
+    axis =list(range = list(NULL, TotalIMOs)),
+    bar = list(color = "darkblue"),
+    steps = list(
+      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
+      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
+      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
+    ),
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = TotalComplete))) 
+
+#qrt1Speed <- qrt1Speed %>% layout(autosize = F, width = 300, height = 300)
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
@@ -71,7 +156,10 @@ ui <- dashboardPage(
                  ),
                  tabPanel("Assesments",
                           #tags$img(src = "/images/300.jpeg", alt = "logo"),
-                          Qrt1Speed)
+                          TotalSpeed,
+                          box(qrt1Speed), box(qrt2Speed), 
+                          box(qrt3Speed), box(qrt4Speed)
+                          )
                )),
       tabPanel(h4("People LOE"),
                tabsetPanel(
