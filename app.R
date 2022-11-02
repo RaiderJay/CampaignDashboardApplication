@@ -14,179 +14,98 @@ library("shinydashboard")
 library("sys")
 library("plotly")
 library("vistime")
+library(DT)
+library(shinyjs)
+library(sodium)
+library(shinyauthr)
 
+#@futre need to move passwords to json file salted and hased
+user_base <- tibble::tibble(
+  user = c("user1", "user2"),
+  password = sapply(c("pass1", "pass2"), sodium::password_store),
+  permissions = c("admin", "standard"),
+  name = c("User One", "User Two")
+)
 
-df <- read.csv("./data/TestDataCamplan.csv")
-df$start_date <- as.Date(df$start_date, format = "%Y-%m-%d")
-df$end_date <- as.Date(df$end_date, format = "%Y-%m-%d" )
-
-winDF <- df[which(df$LOE == "Win"),]
-peopleDF <- df[which(df$LOE == "People"),]
-innovateDF <- df[which(df$LOE == "Innovate"),]
-
-TotalComplete <- sum(na.omit(df$completed))
-TotalIMOs <- length(na.omit(df$completed))
-
-
-opApproach = vistime(df, col.event = "IMO_Name", col.group = "LOE", title = "OP Approach", col.start = "start_date", col.end = "end_date")
-PeopleApproach = vistime(peopleDF, col.event = "IMO_Name", col.group = "Sub_LOE", title = "OP Approach: People", col.start = "start_date", col.end = "end_date")
-WinApproach = vistime(winDF, col.event = "IMO_Name", col.group = "Sub_LOE", title = "OP Approach: Win", col.start = "start_date", col.end = "end_date")
-InnovateApproach = vistime(innovateDF, col.event = "IMO_Name", col.group = "Sub_LOE", title = "OP Approach: Innovate", col.start = "start_date", col.end = "end_date")
-
-TotalSpeed <- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = TotalComplete,
-  title = list(text = "Campaign IMO Performance"),
-  type = "indicator",
-  mode = "gauge+number+delta",
-  delta = list(reference = 0),
-  gauge = list(
-    axis =list(range = list(NULL, TotalIMOs)),
-    bar = list(color = "darkblue"),
-    steps = list(
-      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
-      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
-      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
-      ),
-    threshold = list(
-      line = list(color = "red", width = 4),
-      thickness = 0.75,
-      value = TotalComplete))) 
-
-qrt1Speed<- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = TotalComplete,
-  title = list(text = "Qrt1 IMO Performance"),
-  type = "indicator",
-  mode = "gauge+number+delta",
-  delta = list(reference = 0),
-  gauge = list(
-    axis =list(range = list(NULL, TotalIMOs)),
-    bar = list(color = "darkblue"),
-    steps = list(
-      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
-      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
-      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
-    ),
-    threshold = list(
-      line = list(color = "red", width = 4),
-      thickness = 0.75,
-      value = TotalComplete)))
-
-qrt2Speed<- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = TotalComplete,
-  title = list(text = "Qrt2 IMO Performance"),
-  type = "indicator",
-  mode = "gauge+number+delta",
-  delta = list(reference = 0),
-  gauge = list(
-    axis =list(range = list(NULL, TotalIMOs)),
-    bar = list(color = "darkblue"),
-    steps = list(
-      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
-      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
-      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
-    ),
-    threshold = list(
-      line = list(color = "red", width = 4),
-      thickness = 0.75,
-      value = TotalComplete))) 
-
-qrt3Speed<- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = TotalComplete,
-  title = list(text = "Qrt3 IMO Performance"),
-  type = "indicator",
-  mode = "gauge+number+delta",
-  delta = list(reference = 0),
-  gauge = list(
-    axis =list(range = list(NULL, TotalIMOs)),
-    bar = list(color = "darkblue"),
-    steps = list(
-      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
-      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
-      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
-    ),
-    threshold = list(
-      line = list(color = "red", width = 4),
-      thickness = 0.75,
-      value = TotalComplete))) 
-
-qrt4Speed<- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = TotalComplete,
-  title = list(text = "Qrt4 IMO Performance"),
-  type = "indicator",
-  mode = "gauge+number+delta",
-  delta = list(reference = 0),
-  gauge = list(
-    axis =list(range = list(NULL, TotalIMOs)),
-    bar = list(color = "darkblue"),
-    steps = list(
-      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
-      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
-      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
-    ),
-    threshold = list(
-      line = list(color = "red", width = 4),
-      thickness = 0.75,
-      value = TotalComplete))) 
-
-#qrt1Speed <- qrt1Speed %>% layout(autosize = F, width = 300, height = 300)
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
   dashboardSidebar(
-    actionButton("Dashboard","Dashboard"),
-    actionButton("DataInput","Data Input")
+    menuItem("Login", tabName = "login", icon = icon("person")),
+    menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
+    menuItem("Database", tabName = "database", icon = icon("database")),
+    menuItem("Data Entry", tabName = "data-entry", icon = icon("keyboard"))
+    # button for login
+    # button for dashboard
+    # button for data view
+    # button for data entry
   ),
   dashboardBody( 
-    tags$head( tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css")),
-    tabsetPanel(
-      tabPanel(h4("Campaign Overview"),
-               tabsetPanel(
-                 tabPanel("Operational Approach",
-                          opApproach,
-                          sliderInput("DatesMerge","Dates:",
-                                      min = Sys.Date() - 30,
-                                      max = as.Date("2024-10-01","%Y-%m-%d"),
-                                      value= c(Sys.Date(),Sys.Date() + 180),
-                                      timeFormat="%Y-%m-%d")
-                 ),
-                 tabPanel("Assesments",
-                          #tags$img(src = "/images/300.jpeg", alt = "logo"),
-                          TotalSpeed,
-                          box(qrt1Speed), box(qrt2Speed), 
-                          box(qrt3Speed), box(qrt4Speed)
-                          )
-               )),
-      tabPanel(h4("People LOE"),
-               tabsetPanel(
-                 tabPanel("Op Approach: People",
-                          PeopleApproach
-                 ),
-                 tabPanel("People: Assesments")
-               )),
-      tabPanel(h4("Win LOE"),
-               tabsetPanel(
-                 tabPanel("Op Approach: Win",
-                          WinApproach
-                 ),
-                 tabPanel("Win: Assesments")
-               )),
-      tabPanel(h4("Innovate LOE"),
-               tabsetPanel(
-                 tabPanel("Op Approach: Innovate",
-                          InnovateApproach
-                 ),
-                 tabPanel("Innovate: Assesments")
-               ))
-    )
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css")
+    ),
+    #loginpage
+    
+    # login section
+    shinyauthr::loginUI(id = "login"),
+    
+    # Sidebar to show user info after login
+    #uiOutput("sidebarpanel"),
+    
+    # Plot to show user info after login
+    uiOutput("loginMessage")
   )
 )
 
-server <- function(input, output) {
+server <- function(input, output, session) {
+  
+  credentials <- shinyauthr::loginServer(
+    id = "login",
+    data = user_base,
+    user_col = user,
+    pwd_col = password,
+    sodium_hashed = TRUE,
+    log_out = reactive(logout_init())
+  )
+  
+  # Logout to hide
+  logout_init <- shinyauthr::logoutServer(
+    id = "logout",
+    active = reactive(credentials()$user_auth)
+  )
+  
+  output$sidebarpanel <- renderUI({
+    
+    # Show only when authenticated
+    req(credentials()$user_auth)
+
+    
+    tagList(
+      # Sidebar with a slider input
+      column(width = 4,
+             sliderInput("obs",
+                         "Number of observations:",
+                         min = 0,
+                         max = 1000,
+                         value = 500)
+      ),
+      
+      column(width = 4,
+             p(paste("You have", credentials()$info[["permissions"]],"permission"))
+      )
+    )
+    
+  })
+  
+  # Plot
+  output$loginMessage<- renderUI({
+    
+    req(credentials()$user_auth)
+    
+    div(wellPanel(h2("This is some text")))
+  })
+  
+  
 }
 
 

@@ -40,3 +40,8 @@
   background-color: rgb(0,0,0);
   align-content: center;
 }
+
+.skin-blue .test-id {
+  text-align: Right;
+  font-weight: bold;
+}
