@@ -1,3 +1,6 @@
+
+library(jsonlite)
+
 # created dummy data frame for testing
 TestCampdata <- data.frame(
   IMO_ID = c("1.a.1","1.a.2","1.b.1","1.c.1","2.a.1", "2.b.1", "2.c.1", "2.d.1","2.e.1","2.f.1","3.a.1","3.b.1","3.c.1","3.c.2","3.c.3","3.c.4"),
@@ -19,5 +22,42 @@ TestCampdata <- data.frame(
   stringsAsFactors = FALSE
 )
 
+TestHigherData <- data.frame(
+  Unit_Name = c("Thunder Cats","Thunder Cats","Thunder Cats","Another Unit","Another Unit"),
+  Event_Type = c("Training Event","Training Event","Key Event","PPBE","PPBE"),
+  Event_Name = c("Space Attack", "Colonize Mars", "Pay the Bills", "Program Money", "Plan Money"),
+  Start_date = c("01-Nov-22","01-Dec-22","15-Nov-22","01-Oct-22","01-Oct-23"),
+  End_date = c("30-Nov-22","10-Dec-22","15-Dec-22","01-Mar-23","01-Mar-24"),
+  stringsAsFactors = FALSE
+)
+
+# convert data to the correct time format
 TestCampdata$IMO_StartDate <- as.Date(TestCampdata$IMO_StartDate, format = "%d-%b-%y" )
 TestCampdata$IMO_ProposedEndDate <- as.Date(TestCampdata$IMO_ProposedEndDate, format = "%d-%b-%y" )
+
+#print(TestHigherData)
+TestHigherData$Start_date <- as.Date(TestHigherData$Start_date, format = "%d-%b-%y" )
+TestHigherData$End_date <- as.Date(TestHigherData$End_date, format = "%d-%b-%y" )
+
+
+# data to file @Future need to add try catch in are for error handling 
+save_data <- function(df, filename) {
+  #need to check if df is dataframe
+  #need to check if filename is string
+ 
+  if (file.exists(filename) != TRUE) {
+    file.create(filename)
+    print("here")
+  } 
+  fileConn <- file(filename)
+  writeLines(jsonlite::toJSON(df, pretty = TRUE), fileConn)
+  close(fileConn)
+}
+
+# data from file @FUTURE need to add try and catch statements for reading
+read_data <- function(filename) {
+  #need to check if df is dataframe
+  #need to check if filename is string
+  df <- as.data.frame(jsonlite::fromJSON(filename)) 
+  return(df)
+}
