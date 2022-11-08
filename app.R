@@ -12,22 +12,30 @@
 library("shiny")
 library("shinydashboard")
 library("sys")
-library("plotly")
+#library("plotly")
 library("vistime")
+library("rhandsontable")
+library("highcharter")
 source("./IO.R")
 
 
 
-print(TestCampdata)
+#print(TestCampdata)
+#save_data(TestCampdata,"./data/test.json")
+#TestCampdata <- read_data("./data/test.json")
 
 winDF <- TestCampdata[which(TestCampdata$IMO_LOE == "Win"),]
 peopleDF <- TestCampdata[which(TestCampdata$IMO_LOE == "People"),]
 innovateDF <- TestCampdata[which(TestCampdata$IMO_LOE == "Innovate"),]
 
-opApproach = vistime(TestCampdata, col.event = "IMO_Name", col.group = "IMO_LOE", title = "OP Approach", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
-PeopleApproach = vistime(peopleDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: People", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
-WinApproach = vistime(winDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Win", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
-InnovateApproach = vistime(innovateDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Innovate", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
+opApproach <- hc_vistime(TestCampdata, col.tooltip= "IMO_Desciption", col.event = "IMO_Name", col.group = "IMO_LOE", title = "OP Approach", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
+
+higherCal <- hc_vistime(TestHigherData,optimize_y = TRUE, show_labels = TRUE, col.event = "Event_Name", col.group = "Unit_Name", col.start = "Start_date", col.end = "End_date")
+
+
+PeopleApproach <- vistime(peopleDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: People", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
+WinApproach <- vistime(winDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Win", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
+InnovateApproach <- vistime(innovateDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Innovate", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
@@ -41,12 +49,14 @@ ui <- dashboardPage(
       tabPanel(h4("Campaign Overview"),
                tabsetPanel(
                  tabPanel("Operational Approach",
-                          opApproach,
-                          sliderInput("DatesMerge","Dates:",
-                                      min = Sys.Date() - 30,
-                                      max = as.Date("2024-10-01","%Y-%m-%d"),
-                                      value= c(Sys.Date(),Sys.Date() + 180),
-                                      timeFormat="%Y-%m-%d")
+                          opApproach%>% 
+                            hc_yAxis(labels = list(style = list(fontSize=18, color="black"), rotation=-90)) %>%
+                            hc_xAxis(labels = list(style = list(fontSize=30, color="black"))),
+                          
+                          higherCal %>% 
+                            hc_yAxis(labels = list(style = list(fontSize=18, color="black"), rotation=-90)) %>%
+                            hc_xAxis(labels = list(style = list(fontSize=30, color="black"))) %>%
+                            hc_size(height = 300)
                  ),
                  tabPanel("Assesments"
                           #tags$img(src = "/images/300.jpeg", alt = "logo"),
@@ -75,6 +85,15 @@ ui <- dashboardPage(
                           InnovateApproach
                  ),
                  tabPanel("Innovate: Assesments")
+               )),
+      tabPanel(h4("Data"),
+               tabsetPanel(
+                 tabPanel("Campaign Data",
+                          rhandsontable(TestCampdata, rowHeaders = NULL) %>% hot_cols("IMO_ID", allowInvalid = TRUE) %>%
+                            hot_cols(colWidths = 100)
+                 ),
+                 tabPanel("Higher HQ Data",
+                 )
                ))
     )
   )
