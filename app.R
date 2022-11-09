@@ -26,9 +26,9 @@ winDF <- TestCampdata[which(TestCampdata$IMO_LOE == "Win"),]
 peopleDF <- TestCampdata[which(TestCampdata$IMO_LOE == "People"),]
 innovateDF <- TestCampdata[which(TestCampdata$IMO_LOE == "Innovate"),]
 
-opApproach <- vistime(TestCampdata, col.tooltip= "IMO_Desciption", col.event = "IMO_Name", col.group = "IMO_LOE", title = "OP Approach", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
+opApproach <- vistime(TestCampdata, linewidth = 20, col.tooltip= "IMO_Desciption", col.event = "IMO_Name", col.group = "IMO_LOE", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
 
-higherCal <- vistime(TestHigherData,optimize_y = TRUE, show_labels = TRUE, col.event = "Event_Name", col.group = "Unit_Name", col.start = "Start_date", col.end = "End_date")
+higherCal <- vistime(TestHigherData,linewidth = 15, optimize_y = TRUE, show_labels = TRUE, col.event = "Event_Name", col.group = "Unit_Name", col.start = "Start_date", col.end = "End_date")
 
 PeopleApproach <- vistime(peopleDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: People", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
 WinApproach <- vistime(winDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Win", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
@@ -46,40 +46,27 @@ ui <- dashboardPage(
       tabPanel(h4("Campaign Overview"),
                tabsetPanel(
                  tabPanel("Operational Approach",
-                          opApproach, #%>% layout(
-                            #xaxis=list(range = c(Sys.Date(), Sys.Date()+183), tickfont=list(size=12, color="black"), 
-                            #           tickangle=-90, side="top"), 
-                            #yaxis=list( tickfont=list(size=14, color="black"),
-                            #            tickangle=90), 
-                            #title = list(text = "Op Approach", y = .985, 
-                            #             font = list(family="Arial Black", 
-                            #                         size = 18, color = "black")),
-                            #margin = list( l = 10, r = 10, b = 0, t = 100, pad = 0)
-                          #),
-                                                  
-                          higherCal #%>% layout(
-                            #xaxis=list(range = c(Sys.Date(), Sys.Date()+183), tickfont=list(size=12, color="black"), 
-                            #           tickangle=-90), 
-                            #yaxis=list( tickfont=list(size=14, color="black"), 
-                            #            tickangle=90),
-                            #title = list(text = "Higher HQs", y = .001, 
-                            #             font = list(family="Arial Black", 
-                            #                         size = 18, color = "black")),
-                            #margin = list(l = 10, r = 10, b = 0, t = 0, pad = 0),
-                            #height = 300
-                         #)
-                 ),
-                 tabPanel("Assesments",
-                          #tags$img(src = "/images/300.jpeg", alt = "logo"),
-                          fig <- subplot(opApproach,higherCal,nrows = 2,shareX = TRUE)  %>%
-                            layout(title = list(text = "Op Approach", font = list(family="Arial Black", size = 18, color = "black")),
-                                   height = 750,
+                          fig <- subplot(opApproach,higherCal, heights = c(.6,.3), nrows = 2, shareX = TRUE)  %>%
+                            layout(height = 750,
                                    xaxis=list(range = c(Sys.Date(), 
                                                         Sys.Date()+183), 
                                               tickfont=list(size=12, color="black"), 
-                                              tickangle=-90, side="bottom"),
-                                   yaxis=list( tickfont=list(size=14, color="black"), 
-                                               tickangle=90))
+                                              tickangle=-90, side="bottom",
+                                              tick0=Sys.Date(),
+                                              dtick = "M1"
+                                              #minor_dtick = 86400000.0,
+                                              #minor_griddash="dash"
+                                   ),
+                                   yaxis=list(tickfont=list(size=14, color="black")),
+                                   title = list(text = "Operational Approach", 
+                                                font = list(
+                                                  family="Arial Black", 
+                                                  size = 18, color = "black"))
+                            )
+                 ),
+                 tabPanel("Assesments",
+                          #tags$img(src = "/images/300.jpeg", alt = "logo"),
+
                           )
                )),
       tabPanel(h4("People LOE"),
