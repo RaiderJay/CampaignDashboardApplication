@@ -16,9 +16,9 @@ TestCampdata <- data.frame(
   IMO_Stat = c(0,0,0,0,4,4,4,0,2,1,4,2,4,4,4,4),
   IMO_OverallStat = c("Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete"),
   IMO_SupportedOBJ = c("Optimize for IW","Optimize for IW","","","Optimize for IW","Adaptive and Defendable Capabilities and Assets","SOJTF-C","Optimize for IA","Optimize for IA","Adaptive and Defendable Capabilities and Assets","Develop and Deliver Relevant Capabilities to the Future Force","Develop and Deliver Relevant Capabilities to the Future Force","Develop and Deliver Relevant Capabilities to the Future Force","Develop and Deliver Relevant Capabilities to the Future Force","Develop and Deliver Relevant Capabilities to the Future Force", "Develop and Deliver Relevant Capabilities to the Future Force"),
-  IMO_StartDate = c("30-Oct-22","01-Nov-22","24-Oct-22","01-Jan-23","30-Oct-22","01-Jan-23","30-Oct-22","30-Oct-22","24-Oct-22","30-Oct-22","30-Oct-22","24-Oct-22","01-Jan-23","01-Jan-23","01-Jan-23", "01-Jan-23"),
-  IMO_ProposedEndDate = c("13-Nov-22","03-Feb-23","12-Dec-22","02-Mar-23","13-Nov-22","02-Mar-23","13-Nov-22","13-Nov-22","12-Dec-22","13-Nov-22","13-Nov-22","12-Dec-22","02-Mar-23","02-Mar-23","02-Mar-23","02-Mar-23"),
-  IMO_ActualEndDate = c("13-Nov-22","03-Feb-23","12-Dec-22","02-Mar-22","13-Nov-22","02-Mar-23","13-Nov-22","13-Nov-22","12-Dec-22","13-Nov-22","13-Nov-22","12-Dec-22","02-Mar-23","02-Mar-23","02-Mar-23","02-Mar-23"),
+  IMO_StartDate = c(Sys.Date() - 10, Sys.Date() + 30, Sys.Date() - 15, Sys.Date() + 120, Sys.Date() - 10, Sys.Date() + 120, Sys.Date() - 10, Sys.Date() - 10, Sys.Date() - 15, Sys.Date() - 10, Sys.Date() - 10, Sys.Date() - 15, Sys.Date() + 120, Sys.Date() + 182, Sys.Date() + 90, Sys.Date() + 200),
+  IMO_ProposedEndDate = c(Sys.Date() + 45, Sys.Date() + 210, Sys.Date() + 80, Sys.Date() + 182, Sys.Date() + 48,Sys.Date() + 190, Sys.Date() + 40,Sys.Date() + 36, Sys.Date() + 165,Sys.Date() + 45,Sys.Date() + 30,Sys.Date() + 49, Sys.Date() + 296,Sys.Date() + 252, Sys.Date() + 180, Sys.Date() + 365),
+  IMO_ActualEndDate = c(Sys.Date() + 45, Sys.Date() + 210, Sys.Date() + 80, Sys.Date() + 182, Sys.Date() + 48,Sys.Date() + 190, Sys.Date() + 40,Sys.Date() + 36, Sys.Date() + 165,Sys.Date() + 45,Sys.Date() + 30,Sys.Date() + 49, Sys.Date() + 296,Sys.Date() + 252, Sys.Date() + 180, Sys.Date() + 365),
   stringsAsFactors = FALSE
 )
 
