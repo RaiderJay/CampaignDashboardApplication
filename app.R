@@ -12,7 +12,7 @@
 library("shiny")
 library("shinydashboard")
 library("sys")
-#library("plotly")
+library("plotly")
 library("vistime")
 library("rhandsontable")
 library("highcharter")
@@ -30,16 +30,15 @@ opApproach <- vistime(TestCampdata, col.tooltip= "IMO_Desciption", col.event = "
 
 higherCal <- vistime(TestHigherData,optimize_y = TRUE, show_labels = TRUE, col.event = "Event_Name", col.group = "Unit_Name", col.start = "Start_date", col.end = "End_date")
 
-
 PeopleApproach <- vistime(peopleDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: People", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
 WinApproach <- vistime(winDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Win", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
 InnovateApproach <- vistime(innovateDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Innovate", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
-  dashboardSidebar(
+  dashboardSidebar( div(class = "test",
     actionButton("Dashboard","Dashboard"),
-    actionButton("DataInput","Data Input")
+    actionButton("DataInput","Data Input"))
   ),
   dashboardBody( 
     tags$head( tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css")),
@@ -47,34 +46,40 @@ ui <- dashboardPage(
       tabPanel(h4("Campaign Overview"),
                tabsetPanel(
                  tabPanel("Operational Approach",
-                          opApproach %>% layout(
-                            xaxis=list(range = c(Sys.Date(), Sys.Date()+183), tickfont=list(size=12, color="black"), 
-                                       tickangle=-90, side="top"), 
-                            yaxis=list( tickfont=list(size=14, color="black"),
-                                        tickangle=90), 
-                            title = list(text = "Op Approach", y = .985, 
-                                         font = list(family="Arial Black", 
-                                                     size = 18, color = "black")),
-                            margin = list( l = 10, r = 10, b = 0, t = 100, pad = 0)
-                          ),
+                          opApproach, #%>% layout(
+                            #xaxis=list(range = c(Sys.Date(), Sys.Date()+183), tickfont=list(size=12, color="black"), 
+                            #           tickangle=-90, side="top"), 
+                            #yaxis=list( tickfont=list(size=14, color="black"),
+                            #            tickangle=90), 
+                            #title = list(text = "Op Approach", y = .985, 
+                            #             font = list(family="Arial Black", 
+                            #                         size = 18, color = "black")),
+                            #margin = list( l = 10, r = 10, b = 0, t = 100, pad = 0)
+                          #),
                                                   
-                          higherCal %>% layout(
-                            xaxis=list(range = c(Sys.Date(), Sys.Date()+183), tickfont=list(size=12, color="black"), 
-                                       tickangle=-90), 
-                            yaxis=list( tickfont=list(size=14, color="black"), 
-                                        tickangle=90),
-                            title = list(text = "Higher HQs", y = .001, 
-                                         font = list(family="Arial Black", 
-                                                     size = 18, color = "black")),
-                            margin = list(l = 10, r = 10, b = 0, t = 0, pad = 0),
-                            height = 300
-                         )
+                          higherCal #%>% layout(
+                            #xaxis=list(range = c(Sys.Date(), Sys.Date()+183), tickfont=list(size=12, color="black"), 
+                            #           tickangle=-90), 
+                            #yaxis=list( tickfont=list(size=14, color="black"), 
+                            #            tickangle=90),
+                            #title = list(text = "Higher HQs", y = .001, 
+                            #             font = list(family="Arial Black", 
+                            #                         size = 18, color = "black")),
+                            #margin = list(l = 10, r = 10, b = 0, t = 0, pad = 0),
+                            #height = 300
+                         #)
                  ),
-                 tabPanel("Assesments"
+                 tabPanel("Assesments",
                           #tags$img(src = "/images/300.jpeg", alt = "logo"),
-                          #TotalSpeed,
-                          #box(qrt1Speed), box(qrt2Speed), 
-                          #box(qrt3Speed), box(qrt4Speed)
+                          fig <- subplot(opApproach,higherCal,nrows = 2,shareX = TRUE)  %>%
+                            layout(title = list(text = "Op Approach", font = list(family="Arial Black", size = 18, color = "black")),
+                                   height = 750,
+                                   xaxis=list(range = c(Sys.Date(), 
+                                                        Sys.Date()+183), 
+                                              tickfont=list(size=12, color="black"), 
+                                              tickangle=-90, side="bottom"),
+                                   yaxis=list( tickfont=list(size=14, color="black"), 
+                                               tickangle=90))
                           )
                )),
       tabPanel(h4("People LOE"),
