@@ -18,8 +18,6 @@ library("rhandsontable")
 library("highcharter")
 source("./IO.R")
 
-
-
 #print(TestCampdata)
 #save_data(TestCampdata,"./data/test.json")
 #TestCampdata <- read_data("./data/test.json")
@@ -28,9 +26,9 @@ winDF <- TestCampdata[which(TestCampdata$IMO_LOE == "Win"),]
 peopleDF <- TestCampdata[which(TestCampdata$IMO_LOE == "People"),]
 innovateDF <- TestCampdata[which(TestCampdata$IMO_LOE == "Innovate"),]
 
-opApproach <- hc_vistime(TestCampdata, col.tooltip= "IMO_Desciption", col.event = "IMO_Name", col.group = "IMO_LOE", title = "OP Approach", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
+opApproach <- vistime(TestCampdata, col.tooltip= "IMO_Desciption", col.event = "IMO_Name", col.group = "IMO_LOE", title = "OP Approach", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
 
-higherCal <- hc_vistime(TestHigherData,optimize_y = TRUE, show_labels = TRUE, col.event = "Event_Name", col.group = "Unit_Name", col.start = "Start_date", col.end = "End_date")
+higherCal <- vistime(TestHigherData,optimize_y = TRUE, show_labels = TRUE, col.event = "Event_Name", col.group = "Unit_Name", col.start = "Start_date", col.end = "End_date")
 
 
 PeopleApproach <- vistime(peopleDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: People", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
@@ -49,14 +47,28 @@ ui <- dashboardPage(
       tabPanel(h4("Campaign Overview"),
                tabsetPanel(
                  tabPanel("Operational Approach",
-                          opApproach%>% 
-                            hc_yAxis(labels = list(style = list(fontSize=18, color="black"), rotation=-90)) %>%
-                            hc_xAxis(labels = list(style = list(fontSize=30, color="black"))),
-                          
-                          higherCal %>% 
-                            hc_yAxis(labels = list(style = list(fontSize=18, color="black"), rotation=-90)) %>%
-                            hc_xAxis(labels = list(style = list(fontSize=30, color="black"))) %>%
-                            hc_size(height = 300)
+                          opApproach %>% layout(
+                            xaxis=list(range = c(Sys.Date(), Sys.Date()+183), tickfont=list(size=12, color="black"), 
+                                       tickangle=-90, side="top"), 
+                            yaxis=list( tickfont=list(size=14, color="black"),
+                                        tickangle=90), 
+                            title = list(text = "Op Approach", y = .985, 
+                                         font = list(family="Arial Black", 
+                                                     size = 18, color = "black")),
+                            margin = list( l = 10, r = 10, b = 0, t = 100, pad = 0)
+                          ),
+                                                  
+                          higherCal %>% layout(
+                            xaxis=list(range = c(Sys.Date(), Sys.Date()+183), tickfont=list(size=12, color="black"), 
+                                       tickangle=-90), 
+                            yaxis=list( tickfont=list(size=14, color="black"), 
+                                        tickangle=90),
+                            title = list(text = "Higher HQs", y = .001, 
+                                         font = list(family="Arial Black", 
+                                                     size = 18, color = "black")),
+                            margin = list(l = 10, r = 10, b = 0, t = 0, pad = 0),
+                            height = 300
+                         )
                  ),
                  tabPanel("Assesments"
                           #tags$img(src = "/images/300.jpeg", alt = "logo"),
