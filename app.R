@@ -12,10 +12,6 @@
 library("shiny")
 library("shinydashboard")
 library("sys")
-library("plotly")
-library("vistime")
-library("rhandsontable")
-#library("highcharter")
 source("./IO.R")
 source("./Utility.R")
 
@@ -34,10 +30,9 @@ ui <- dashboardPage(
                  tabPanel("Operational Approach",
                           get_OpApproach(TestCampdata, TestHigherData)
                  ),
-                 tabPanel("Assesments"
-                          #tags$img(src = "/images/300.jpeg", alt = "logo"),
-
-                          )
+                 tabPanel("Assesments",
+                          get_completionRate(TestCampdata, Sys.Date(), Sys.Date()+80)
+                 )
                )),
       tabPanel(h4("People LOE"),
                tabsetPanel(

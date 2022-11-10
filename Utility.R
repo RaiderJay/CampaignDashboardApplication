@@ -70,7 +70,7 @@ get_OpApproach <- function(df1, df2) {
   }
 
 get_LOE <- function(df, loe_label) {
-  loe_DF <- TestCampdata[which(TestCampdata$IMO_LOE == loe_label),]
+  loe_DF <- df[which(df$IMO_LOE == loe_label),]
   plot <- vistime(loe_DF, linewidth = 20, col.event = "IMO_Name", col.group = "IMO_SubLOE", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
   return (plot %>% 
     layout(dragmode = "pan",
@@ -79,7 +79,23 @@ get_LOE <- function(df, loe_label) {
                       tickfont=list(size=12, color="black"),
                       tickangle=-90, side="bottom",
                       tick0=Sys.Date(),
-                      dtick = "M1"),
+                      dtick = "M1",
+                      rangeselector = list(
+                        buttons = list(
+                          list(count = 3,
+                               label = "3 months",
+                               step = "month",
+                               stepmode = "backword"),
+                          list(count = 6,
+                               label = "6 months",
+                               step = "month",
+                               stepmode = "backword"),
+                          list(count = 1,
+                               label = "1 year",
+                               step = "year",
+                               stepmode = "backword")
+                        ))
+                      ),
            yaxis=list(tickfont=list(size=14,
                                     family = "Arial Black",
                                     fixedrange=TRUE,
@@ -92,3 +108,53 @@ get_LOE <- function(df, loe_label) {
            margin = list(t=100)
     ))
 }
+
+get_completionRate <- function(df, s_date, e_date) {
+  df <- df[df$IMO_ProposedEndDate >= s_date & df$IMO_ProposedEndDate <= e_date, ]
+  p_comp = nrow(df)
+  a_comp = nrow(df[which(df$IMO_OverallStat == "Complete"),]) #need to noramalize data
+  print(p_comp)
+  print(a_comp)
+  
+  TotalSpeed <- plot_ly(
+    domain = list(x = c(0, 1), y = c(0, 1)),
+    value = a_comp,
+    title = list(text = "Campaign IMO Performance"),
+    type = "indicator",
+    mode = "gauge+number+delta",
+    delta = list(reference = 0),
+    gauge = list(
+       axis =list(range = list(NULL, p_comp)),
+       bar = list(color = "darkblue"),
+       steps = list(
+         list(range = c(0, ceiling(p_comp * .25)), color = "red"),
+         list(range = c(ceiling(p_comp * .25), ceiling(p_comp * .75)), color = "orange"),
+         list(range = c(ceiling(p_comp * .75), p_comp), color = "green")
+       ),
+       threshold = list(
+         line = list(color = "red", width = 4),
+         thickness = 0.75,
+         value = a_comp))) 
+  return(TotalSpeed)
+}
+
+
+#TotalSpeed <- plot_ly(
+#  domain = list(x = c(0, 1), y = c(0, 1)),
+#  value = TotalComplete,
+#  title = list(text = "Campaign IMO Performance"),
+#  type = "indicator",
+#  mode = "gauge+number+delta",
+#  delta = list(reference = 0),
+#  gauge = list(
+#    axis =list(range = list(NULL, TotalIMOs)),
+#    bar = list(color = "darkblue"),
+#    steps = list(
+#      list(range = c(0, ceiling(TotalIMOs * .25)), color = "red"),
+#      list(range = c(ceiling(TotalIMOs * .25), ceiling(TotalIMOs * .75)), color = "orange"),
+#      list(range = c(ceiling(TotalIMOs * .75), TotalIMOs), color = "green")
+#    ),
+#    threshold = list(
+#      line = list(color = "red", width = 4),
+#      thickness = 0.75,
+#      value = TotalComplete))) 
