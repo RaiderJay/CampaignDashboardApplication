@@ -12,20 +12,23 @@
 library("shiny")
 library("shinydashboard")
 library("sys")
+library("rhandsontable")
 source("./IO.R")
 source("./Utility.R")
 
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
-  dashboardSidebar( div(class = "test",
-    actionButton("Dashboard","Dashboard"),
-    actionButton("DataInput","Data Input"))
+    dashboardSidebar(
+      tags$div(class = "menu_class",
+               menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard"))
+      )
+      
   ),
   dashboardBody( 
     tags$head( tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css")),
     tabsetPanel(
-      tabPanel(h4("Campaign Overview"),
+      tabPanel("Campaign Overview",
                tabsetPanel(
                  tabPanel("Operational Approach",
                           get_OpApproach(TestCampdata, TestHigherData)
@@ -34,28 +37,28 @@ ui <- dashboardPage(
                           get_completionRate(TestCampdata, Sys.Date(), Sys.Date()+80)
                  )
                )),
-      tabPanel(h4("People LOE"),
+      tabPanel("People LOE",
                tabsetPanel(
                  tabPanel("Op Approach: People",
                          get_LOE(TestCampdata,"People")
                  ),
                  tabPanel("People: Assesments")
                )),
-      tabPanel(h4("Win LOE"),
+      tabPanel("Win LOE",
                tabsetPanel(
                  tabPanel("Op Approach: Win",
                           get_LOE(TestCampdata,"Win")
                  ),
                  tabPanel("Win: Assesments")
                )),
-      tabPanel(h4("Innovate LOE"),
+      tabPanel("Innovate LOE",
                tabsetPanel(
                  tabPanel("Op Approach: Innovate",
                           get_LOE(TestCampdata,"Innovate")
                  ),
                  tabPanel("Innovate: Assesments")
                )),
-      tabPanel(h4("Data"),
+      tabPanel("Data",
                tabsetPanel(
                  tabPanel("Campaign Data",
                           rhandsontable(TestCampdata, rowHeaders = NULL) %>% hot_cols("IMO_ID", allowInvalid = TRUE) %>%
