@@ -16,28 +16,28 @@ TestCampdata <- data.frame(
   IMO_Stat = c(0,0,0,0,4,4,4,0,2,1,4,2,4,4,4,4),
   IMO_OverallStat = c("Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete","Incomplete"),
   IMO_SupportedOBJ = c("Optimize for IW","Optimize for IW","","","Optimize for IW","Adaptive and Defendable Capabilities and Assets","SOJTF-C","Optimize for IA","Optimize for IA","Adaptive and Defendable Capabilities and Assets","Develop and Deliver Relevant Capabilities to the Future Force","Develop and Deliver Relevant Capabilities to the Future Force","Develop and Deliver Relevant Capabilities to the Future Force","Develop and Deliver Relevant Capabilities to the Future Force","Develop and Deliver Relevant Capabilities to the Future Force", "Develop and Deliver Relevant Capabilities to the Future Force"),
-  IMO_StartDate = c(Sys.Date() - 10, Sys.Date() + 30, Sys.Date() - 15, Sys.Date() + 120, Sys.Date() - 10, Sys.Date() + 120, Sys.Date() - 10, Sys.Date() - 10, Sys.Date() - 15, Sys.Date() - 10, Sys.Date() - 10, Sys.Date() - 15, Sys.Date() + 120, Sys.Date() + 182, Sys.Date() + 90, Sys.Date() + 200),
+  IMO_StartDate = c(Sys.Date() - 10, Sys.Date() + 30, Sys.Date() - 15, Sys.Date() + 120, Sys.Date() + 48, Sys.Date() + 120, Sys.Date() - 10, Sys.Date() - 10, Sys.Date() - 15, Sys.Date() - 10, Sys.Date() - 10, Sys.Date() - 15, Sys.Date() + 120, Sys.Date() + 182, Sys.Date() + 90, Sys.Date() + 200),
   IMO_ProposedEndDate = c(Sys.Date() + 45, Sys.Date() + 210, Sys.Date() + 80, Sys.Date() + 182, Sys.Date() + 48,Sys.Date() + 190, Sys.Date() + 40,Sys.Date() + 36, Sys.Date() + 165,Sys.Date() + 45,Sys.Date() + 30,Sys.Date() + 49, Sys.Date() + 296,Sys.Date() + 252, Sys.Date() + 180, Sys.Date() + 365),
   IMO_ActualEndDate = c(Sys.Date() + 45, Sys.Date() + 210, Sys.Date() + 80, Sys.Date() + 182, Sys.Date() + 48,Sys.Date() + 190, Sys.Date() + 40,Sys.Date() + 36, Sys.Date() + 165,Sys.Date() + 45,Sys.Date() + 30,Sys.Date() + 49, Sys.Date() + 296,Sys.Date() + 252, Sys.Date() + 180, Sys.Date() + 365),
   stringsAsFactors = FALSE
 )
 
 TestHigherData <- data.frame(
-  Unit_Name = c("Thunder Cats","Thunder Cats","Thunder Cats","Another Unit","Another Unit"),
+  Unit_Name = c("Cats","Cats","Cats","A Unit","A Unit"),
   Event_Type = c("Training Event","Training Event","Key Event","PPBE","PPBE"),
-  Event_Name = c("Space Attack", "Colonize Mars", "Pay the Bills", "Program Money", "Plan Money"),
-  Start_date = c("01-Nov-22","01-Dec-22","15-Nov-22","01-Oct-22","01-Oct-23"),
-  End_date = c("30-Nov-22","10-Dec-22","15-Dec-22","01-Mar-23","01-Mar-24"),
+  Event_Name = c("Space Attack", "Colonize Mars", "Pay the Bills", "Plan Money", "Program Money"),
+  Start_date = c(Sys.Date() + 30, Sys.Date() + 60, Sys.Date() + 45,Sys.Date(),Sys.Date() + 100),
+  End_date = c(Sys.Date() + 60, Sys.Date() + 100,Sys.Date() + 80, Sys.Date() + 100, Sys.Date() + 400),
   stringsAsFactors = FALSE
 )
 
 # convert data to the correct time format
-TestCampdata$IMO_StartDate <- as.Date(TestCampdata$IMO_StartDate, format = "%d-%b-%y" )
-TestCampdata$IMO_ProposedEndDate <- as.Date(TestCampdata$IMO_ProposedEndDate, format = "%d-%b-%y" )
+#TestCampdata$IMO_StartDate <- as.Date(TestCampdata$IMO_StartDate, format = "%d-%b-%y" )
+#TestCampdata$IMO_ProposedEndDate <- as.Date(TestCampdata$IMO_ProposedEndDate, format = "%d-%b-%y" )
 
 #print(TestHigherData)
-TestHigherData$Start_date <- as.Date(TestHigherData$Start_date, format = "%d-%b-%y" )
-TestHigherData$End_date <- as.Date(TestHigherData$End_date, format = "%d-%b-%y" )
+#TestHigherData$Start_date <- as.Date(TestHigherData$Start_date, format = "%d-%b-%y" )
+#TestHigherData$End_date <- as.Date(TestHigherData$End_date, format = "%d-%b-%y" )
 
 
 # data to file @Future need to add try catch in are for error handling 

@@ -15,24 +15,9 @@ library("sys")
 library("plotly")
 library("vistime")
 library("rhandsontable")
-library("highcharter")
+#library("highcharter")
 source("./IO.R")
-
-#print(TestCampdata)
-#save_data(TestCampdata,"./data/test.json")
-#TestCampdata <- read_data("./data/test.json")
-
-winDF <- TestCampdata[which(TestCampdata$IMO_LOE == "Win"),]
-peopleDF <- TestCampdata[which(TestCampdata$IMO_LOE == "People"),]
-innovateDF <- TestCampdata[which(TestCampdata$IMO_LOE == "Innovate"),]
-
-opApproach <- vistime(TestCampdata, linewidth = 20, col.tooltip= "IMO_Desciption", col.event = "IMO_Name", col.group = "IMO_LOE", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
-
-higherCal <- vistime(TestHigherData,linewidth = 15, optimize_y = TRUE, show_labels = TRUE, col.event = "Event_Name", col.group = "Unit_Name", col.start = "Start_date", col.end = "End_date")
-
-PeopleApproach <- vistime(peopleDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: People", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
-WinApproach <- vistime(winDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Win", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
-InnovateApproach <- vistime(innovateDF, col.event = "IMO_Name", col.group = "IMO_SubLOE", title = "OP Approach: Innovate", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
+source("./Utility.R")
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
@@ -46,25 +31,9 @@ ui <- dashboardPage(
       tabPanel(h4("Campaign Overview"),
                tabsetPanel(
                  tabPanel("Operational Approach",
-                          fig <- subplot(opApproach,higherCal, heights = c(.6,.3), nrows = 2, shareX = TRUE)  %>%
-                            layout(height = 750,
-                                   xaxis=list(range = c(Sys.Date(), 
-                                                        Sys.Date()+183), 
-                                              tickfont=list(size=12, color="black"), 
-                                              tickangle=-90, side="bottom",
-                                              tick0=Sys.Date(),
-                                              dtick = "M1"
-                                              #minor_dtick = 86400000.0,
-                                              #minor_griddash="dash"
-                                   ),
-                                   yaxis=list(tickfont=list(size=14, color="black")),
-                                   title = list(text = "Operational Approach", 
-                                                font = list(
-                                                  family="Arial Black", 
-                                                  size = 18, color = "black"))
-                            )
+                          get_OpApproach(TestCampdata, TestHigherData)
                  ),
-                 tabPanel("Assesments",
+                 tabPanel("Assesments"
                           #tags$img(src = "/images/300.jpeg", alt = "logo"),
 
                           )
@@ -72,21 +41,21 @@ ui <- dashboardPage(
       tabPanel(h4("People LOE"),
                tabsetPanel(
                  tabPanel("Op Approach: People",
-                          PeopleApproach
+                         get_LOE(TestCampdata,"People")
                  ),
                  tabPanel("People: Assesments")
                )),
       tabPanel(h4("Win LOE"),
                tabsetPanel(
                  tabPanel("Op Approach: Win",
-                          WinApproach
+                          get_LOE(TestCampdata,"Win")
                  ),
                  tabPanel("Win: Assesments")
                )),
       tabPanel(h4("Innovate LOE"),
                tabsetPanel(
                  tabPanel("Op Approach: Innovate",
-                          InnovateApproach
+                          get_LOE(TestCampdata,"Innovate")
                  ),
                  tabPanel("Innovate: Assesments")
                )),
