@@ -20,10 +20,14 @@ source("./Utility.R")
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
     dashboardSidebar(
-      tags$div(class = "menu_class",
-               menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard"))
-      )
-      
+      sidebarMenu(id = "tabs",
+                  tags$div(class = "menu_class",
+                           sidebarSearchForm(textId = "searchText", buttonId = "searchButton",
+                                             label = "Search..."),
+                           menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
+                           menuItem("Data", tabName = "dashboard", icon = icon("database"))
+                           )
+                  )
   ),
   dashboardBody( 
     tags$head( tags$link(rel = "stylesheet", type = "text/css", href = "dashboard.css")),
