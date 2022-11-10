@@ -34,6 +34,11 @@
   align-content: center;
 }
 
+.skin-blue .sidebar-menu {
+  margin-bottom: 200;
+  padding-bottom: 100px;
+}
+
 .menu_class {
   align-content: center;
   font-size: 18px;
@@ -51,4 +56,5 @@
   left: 0px;
   bottom: 0px;
   right: 0px;
+  padding-bottom: 100px;
 }
