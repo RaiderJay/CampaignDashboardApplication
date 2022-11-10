@@ -25,7 +25,7 @@ get_OpApproach <- function(df1, df2) {
   fig <- subplot(opApproach, higherCal, margin = .001, heights = c(.6,.3), nrows = 2, 
                  shareX = TRUE)  %>%
     layout(dragmode = "pan",
-           height = 750, 
+           height = 750,  # look into minreducedheight
            xaxis=list(range = c(Sys.Date(), Sys.Date()+183),
                       tickfont=list(size=12, color="black"),
                       tickangle=-90, side="bottom",
@@ -54,7 +54,7 @@ get_OpApproach <- function(df1, df2) {
 
 get_LOE <- function(df, loe_label) {
   loe_DF <- TestCampdata[which(TestCampdata$IMO_LOE == loe_label),]
-  plot <- vistime(loe_DF, col.event = "IMO_Name", col.group = "IMO_SubLOE", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
+  plot <- vistime(loe_DF, linewidth = 20, col.event = "IMO_Name", col.group = "IMO_SubLOE", col.start = "IMO_StartDate", col.end = "IMO_ProposedEndDate", col.color = "IMO_Color")
   return (plot %>% 
     layout(dragmode = "pan",
            height = 500,
