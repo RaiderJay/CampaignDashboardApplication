@@ -30,7 +30,24 @@ get_OpApproach <- function(df1, df2) {
                       tickfont=list(size=12, color="black"),
                       tickangle=-90, side="bottom",
                       tick0=Sys.Date(),
-                      dtick = "M1"),
+                      dtick = "M1",
+                      rangeselector = list(
+                        buttons = list(
+                          list(count = 3,
+                               label = "3 months",
+                               step = "month",
+                               stepmode = "backword"),
+                          list(count = 6,
+                               label = "6 months",
+                               step = "month",
+                               stepmode = "backword"),
+                          list(count = 1,
+                               label = "1 year",
+                               step = "year",
+                               stepmode = "backword")
+                          ))
+                      #rangeslider = list(type = "date", thickness = .08)
+                      ),
                       #minor_dtick = 86400000.0,
                       #minor_griddash="dash"
            yaxis=list(tickangle=-90,
