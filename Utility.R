@@ -113,9 +113,7 @@ get_completionRate <- function(df, s_date, e_date) {
   df <- df[df$IMO_ProposedEndDate >= s_date & df$IMO_ProposedEndDate <= e_date, ]
   p_comp = nrow(df)
   a_comp = nrow(df[which(df$IMO_OverallStat == "Complete"),]) #need to noramalize data
-  print(p_comp)
-  print(a_comp)
-  
+
   TotalSpeed <- plot_ly(
     domain = list(x = c(0, 1), y = c(0, 1)),
     value = a_comp,
