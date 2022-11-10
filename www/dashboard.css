@@ -5,7 +5,7 @@
   color: rgb(255,255,255);
   font-weight: bold;
   font-size: 18px;
-  text-align: Right;
+  text-align: right;
 }
 
 /*Dashboard Header when Hovered*/
@@ -28,15 +28,27 @@
   background-color: rgb(68, 76, 56);
 }
 
-/*Dashboard Sidebar*/
-.skin-blue .main-sidebar {
-  background-color: rgb(0,0,0);
-  align-content: center;
-  align-items: center;
-}
-
 /*Main Body*/
 .skin-blue .main-body {
   background-color: rgb(0,0,0);
   align-content: center;
+}
+
+.menu_class {
+  align-content: center;
+  font-size: 18px;
+  text-align: center;
+  list-style: none
+  align-content: center;
+  background-image: url("./images/SideBar_transparent.png");
+  background-color: rgb(0,0,0);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; 
+  position: absolute;
+  margin: 0;
+  top: 50px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
 }
