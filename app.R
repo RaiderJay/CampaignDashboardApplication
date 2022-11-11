@@ -25,8 +25,13 @@ ui <- dashboardPage(
                            sidebarSearchForm(textId = "searchText", buttonId = "searchButton",
                                              label = "Search..."),
                            menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-                           menuItem("Assesments", tabName = "Assesments", icon = icon("chart-line")),
-                           menuItem("Data", tabName = "data", icon = icon("database"))
+                           menuItem("Assesments:", tabName = "assesments", icon = icon("chart-line")),
+                           menuSubItem("Summary Stats"),
+                           menuSubItem("Critical Status"),
+                           menuSubItem("Dependency Graph"),
+                           menuSubItem("Natural Language"),
+                           menuItem("Data", tabName = "data", icon = icon("database")),
+                           menuItem("About", tabName = "about", icon = icon("circle-info"))
                            )
                   )
   ),
@@ -79,50 +84,21 @@ ui <- dashboardPage(
             )
       ),
 
-      tabItem(tabName = "data", "test2")
+      tabItem(tabName = "data",
+              tabsetPanel(
+                tabPanel("Campaign Data",
+                         rhandsontable(TestCampdata, rowHeaders = NULL) %>% 
+                           hot_cols("IMO_ID", allowInvalid = TRUE) %>% 
+                           hot_cols(colWidths = 100)
+                         ),
+                tabPanel("Higher Unit",
+                         rhandsontable(TestHigherData, rowHeaders = NULL) %>% 
+                           hot_cols("Unit_Name", allowInvalid = TRUE) %>% 
+                           hot_cols(colWidths = 100)
+                ),
+              )
+      )
     )
-    
-    #tabsetPanel(  tabName = "dashboard",
-    #  tabPanel("Campaign Overview",
-    #           tabsetPanel(
-    #             tabPanel("Operational Approach",
-    #                      get_OpApproach(TestCampdata, TestHigherData)
-    #             ),
-    #             tabPanel("Assesments",
-    #                      get_completionRate(TestCampdata, Sys.Date(), Sys.Date()+80)
-    #             )
-    #           )),
-    #  tabPanel("People LOE",
-    #           tabsetPanel(
-    #             tabPanel("Op Approach: People",
-    #                     get_LOE(TestCampdata,"People")
-    #             ),
-    #             tabPanel("People: Assesments")
-    #           )),
-    #  tabPanel("Win LOE",
-    #           tabsetPanel(
-    #             tabPanel("Op Approach: Win",
-    #                      get_LOE(TestCampdata,"Win")
-    #             ),
-    #             tabPanel("Win: Assesments")
-    #           )),
-    #  tabPanel("Innovate LOE",
-    #           tabsetPanel(
-    #             tabPanel("Op Approach: Innovate",
-    #                      get_LOE(TestCampdata,"Innovate")
-    #             ),
-    #             tabPanel("Innovate: Assesments")
-    #           )),
-    #  tabPanel("Data",
-    #           tabsetPanel(
-    #             tabPanel("Campaign Data",
-    #                      rhandsontable(TestCampdata, rowHeaders = NULL) %>% hot_cols("IMO_ID", allowInvalid = TRUE) %>%
-    #                        hot_cols(colWidths = 100)
-    #             ),
-    #             tabPanel("Higher HQ Data",
-    #             )
-    #           ))
-    #)
   )
 )
 

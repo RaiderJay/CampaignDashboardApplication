@@ -40,7 +40,7 @@
 }
 
 .menu_class {
-  align-content: center;
+  align-content: space-between;
   font-size: 18px;
   text-align: center;
   list-style: none;
@@ -50,10 +50,10 @@
   background-repeat: no-repeat;
   background-size: cover; 
   position: absolute;
-  margin: 0;
+  margin: 20;
   top: 50px;
-  left: 0px;
-  bottom: 0px;
-  right: 0px;
+  left: 0;
+  bottom: 0;
+  right: 0;
   padding-bottom: 100px;
 }
