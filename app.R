@@ -13,6 +13,7 @@ library("shiny")
 library("shinydashboard")
 library("sys")
 library("rhandsontable")
+library("markdown")
 source("./IO.R")
 source("./Utility.R")
 
@@ -96,6 +97,11 @@ ui <- dashboardPage(
                            hot_cols("Unit_Name", allowInvalid = TRUE) %>% 
                            hot_cols(colWidths = 100)
                 ),
+              )
+      ),
+      tabItem(tabName = "about",
+              fluidPage(
+                includeMarkdown("README.md")
               )
       )
     )
