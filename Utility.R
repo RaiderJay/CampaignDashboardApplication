@@ -1,6 +1,8 @@
+library('igraph')
 library("plotly")
 library("vistime")
 library("sys")
+
 
 #get OP Approach for display
 get_OpApproach <- function(df1, df2) {
@@ -135,6 +137,11 @@ get_completionRate <- function(df, s_date, e_date) {
          thickness = 0.75,
          value = a_comp))) 
   return(TotalSpeed)
+}
+
+get_dep <- function(df) {
+  #net <- graph_from_data_frame(d=df, vertices=nodes, directed=T) 
+  #p <-plot(net)
 }
 
 

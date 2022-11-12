@@ -26,11 +26,11 @@ ui <- dashboardPage(
                   sidebarSearchForm(textId = "searchText", buttonId = "searchButton",
                                     label = "Search...", icon = icon("magnifying-glass")),
                   menuItem("Dashboard", tabName = "dashboard", icon = icon("gauge")),
-                  menuItem("Assesments:", tabName = "assesments", icon = icon("chart-line"),
-                           menuSubItem("Summary Stats", icon = icon("chart-simple")),
-                           menuSubItem("Critical Status", icon = icon("bell")),
-                           menuSubItem("Dependency Graph", icon = icon("diagram-project")),
-                           menuSubItem("Natural Language", icon = icon("book"))),
+                  menuItem("Assesments:", icon = icon("chart-line"),
+                           menuSubItem("Summary Stats",  tabName = "stat", icon = icon("chart-simple")),
+                           menuSubItem("Critical Status", tabName = "crit", icon = icon("bell")),
+                           menuSubItem("Dependency Graph", tabName = "dep", icon = icon("diagram-project")),
+                           menuSubItem("Natural Language", tabName = "nlp", icon = icon("book"))),
                   menuItem("Data", tabName = "data", icon = icon("database")),
                   menuItem("About", tabName = "about", icon = icon("circle-info"))
                   )
@@ -84,6 +84,21 @@ ui <- dashboardPage(
             )
       ),
 
+      tabItem(tabName = "stat", "stats",
+        
+      ),
+      tabItem(tabName = "crit", "critical stats",
+              
+      ),
+      tabItem(tabName = "dep",
+              
+              tabsetPanel(
+                tabPanel("dependancy Graph", "test"
+                         #get_dep(TestCampdata)
+                         )
+              )
+      ),
+      
       tabItem(tabName = "data",
               tabsetPanel(
                 tabPanel("Campaign Data",
