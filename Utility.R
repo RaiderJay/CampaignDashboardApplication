@@ -63,7 +63,8 @@ get_OpApproach <- function(df1, df2) {
                         y = .98,
                         font = list(family = "Arial Black", 
                                     size = 32, 
-                                    color = "black"))
+                                    color = "black")),
+           margin = list(t=50)
            )
     
     return(fig)

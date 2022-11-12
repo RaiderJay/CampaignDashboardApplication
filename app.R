@@ -20,20 +20,19 @@ source("./Utility.R")
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
-    dashboardSidebar(
-      sidebarMenu(id = "tabs",
-                  tags$div(class = "menu_class",
-                           sidebarSearchForm(textId = "searchText", buttonId = "searchButton",
-                                             label = "Search..."),
-                           menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-                           menuItem("Assesments:", tabName = "assesments", icon = icon("chart-line")),
-                           menuSubItem("Summary Stats"),
-                           menuSubItem("Critical Status"),
-                           menuSubItem("Dependency Graph"),
-                           menuSubItem("Natural Language"),
-                           menuItem("Data", tabName = "data", icon = icon("database")),
-                           menuItem("About", tabName = "about", icon = icon("circle-info"))
-                           )
+    dashboardSidebar( 
+      sidebarMenu(id = "tabs", 
+                  tags$div(class = "menu_class"),
+                  sidebarSearchForm(textId = "searchText", buttonId = "searchButton",
+                                    label = "Search...", icon = icon("magnifying-glass")),
+                  menuItem("Dashboard", tabName = "dashboard", icon = icon("gauge")),
+                  menuItem("Assesments:", tabName = "assesments", icon = icon("chart-line"),
+                           menuSubItem("Summary Stats", icon = icon("chart-simple")),
+                           menuSubItem("Critical Status", icon = icon("bell")),
+                           menuSubItem("Dependency Graph", icon = icon("diagram-project")),
+                           menuSubItem("Natural Language", icon = icon("book"))),
+                  menuItem("Data", tabName = "data", icon = icon("database")),
+                  menuItem("About", tabName = "about", icon = icon("circle-info"))
                   )
   ),
   dashboardBody( 
