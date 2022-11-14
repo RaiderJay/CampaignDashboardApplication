@@ -1,14 +1,18 @@
-library('igraph')
+#library('igraph')
 library("plotly")
 library("vistime")
 library("sys")
-
+library("lubridate")
+library("dplyr") 
+library(hash)
 
 #get OP Approach for display
 get_OpApproach <- function(df1, df2) {
   
   #get two timeline sub_plots
   opApproach <- vistime(df1, linewidth = 20, 
+                        optimize_y = TRUE, 
+                        show_labels = TRUE, 
                         col.tooltip= "IMO_Desciption", 
                         col.event = "IMO_Name", 
                         col.group = "IMO_LOE", 
@@ -68,7 +72,7 @@ get_OpApproach <- function(df1, df2) {
                                     color = "black")),
            margin = list(t=50)
            )
-    
+
     return(fig)
   }
 
@@ -137,6 +141,45 @@ get_completionRate <- function(df, s_date, e_date) {
          thickness = 0.75,
          value = a_comp))) 
   return(TotalSpeed)
+}
+
+get_camp_stats <- function(df) {
+  stats <- hash() 
+  
+  stats[["total_imo"]] <- nrow(df)
+  stats[["total_complete"]] <- nrow(df[which(df$IMO_OverallStat == "Complete"),])
+  stats[["total_outstanding"]] <- stats[["total_imo"]] - stats[["total_complete"]]
+  stats[["total_overdue"]] <-  nrow(df[which(df[which(
+    df$IMO_OverallStat != "Complete"),]$IMO_ProposedEndDate < Sys.Date()),])
+  stats[["Off_Higher"]] <- nrow(df[which(df$IMO_Stat == 1),])
+  stats[["Off_Staff"]] <- nrow(df[which(df$IMO_Stat == 2),])
+  stats[["Off_Sec"]] <- nrow(df[which(df$IMO_Stat == 3),])
+  stats[["OT"]] <- nrow(df[which(df$IMO_Stat == 4),])
+ 
+
+  #Sys.Date()
+  
+  return(stats)
+}
+
+get_Actual_by_month <- function(df) {
+  stat <- df
+  stat$year_month <- floor_date(stat$IMO_ActualEndDate, "month")
+  stat['value'] <- 1
+  
+  stat_aggr <- stat %>%                         # Aggregate data
+    group_by(year_month) %>% 
+    dplyr::summarize(value  = sum(value )) %>% 
+    as.data.frame()
+  
+  fig <- plot_ly(
+    x = stat_aggr$year_month,
+    y = stat_aggr$value,
+    name = "Projected Completion By Month",
+    type = "bar"
+  )
+  
+  return(fig)
 }
 
 get_dep <- function(df) {

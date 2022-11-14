@@ -17,6 +17,9 @@ library("markdown")
 source("./IO.R")
 source("./Utility.R")
 
+## get relevent non-plot related data move to utility in future or make class
+
+stats <- get_camp_stats(TestCampdata)
 
 ui <- dashboardPage(
   dashboardHeader(title = "Campaign Dashboard"),
@@ -84,8 +87,34 @@ ui <- dashboardPage(
             )
       ),
 
-      tabItem(tabName = "stat", "stats",
-        
+      tabItem(tabName = "stat",
+              tabsetPanel(
+                tabPanel("Total Campaign Stats",
+                         fluidRow(
+                          infoBox("Total IMOs", stats[["total_imo"]], 
+                                  icon = icon("building-columns"), 
+                                  fill = TRUE, color="blue"),
+                          infoBox("Total IMOs Completed", stats[["total_complete"]], 
+                                  icon = icon("list-check"), 
+                                  fill = TRUE, color="green"),
+                          infoBox("Total IMOs Outstanding", stats[["total_outstanding"]], 
+                                  icon = icon("clipboard-list"), 
+                                  fill = TRUE, color="yellow"),
+                          infoBox("Total IMOs Overdue", stats[["total_overdue"]], 
+                                  icon = icon("clock"), 
+                                  fill = TRUE, color="red"),
+                          infoBox("Off Track Higher Assistance", stats[["Off_Higher"]], 
+                                  fill = TRUE, color="maroon"),
+                          infoBox("Off Track Staff Assistance", stats[["Off_Staff"]], 
+                                  fill = TRUE, color="red"),
+                          infoBox("Off Track Section Internal", stats[["Off_Sec"]], 
+                                  fill = TRUE, color="yellow"),
+                          infoBox("On Track", stats[["OT"]], 
+                                  fill = TRUE, color="green")
+                         #get_Actual_by_month(TestCampdata)
+                )
+              )
+          )
       ),
       tabItem(tabName = "crit", "critical stats",
               
