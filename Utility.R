@@ -162,9 +162,23 @@ get_camp_stats <- function(df) {
   return(stats)
 }
 
-get_Actual_by_month <- function(df) {
+get_total_stats_charts <- function(df) {
+  
+  c <- nrow(df[which(df$IMO_OverallStat == "Complete"),])
+  o <- nrow(df[which(df$IMO_OverallStat == "Incomplete"),])
+  
+  labels = c('Total IMOs Completed','Total IMOs Outstanding')
+  values = c(c, o)
+  
+  fig1 <- plot_ly(type='pie', labels=labels, values=values, 
+                 textinfo='label+percent',
+                 insidetextorientation='radial',
+                 showlegend = FALSE,
+                 textposition = 'inside',
+                 domain = list(x = c(0.0, 0.25, .25), y = c(0, 1)),hole = 0)
+
   stat <- df
-  stat$year_month <- floor_date(stat$IMO_ActualEndDate, "month")
+  stat$year_month <- floor_date(stat$IMO_ProposedEndDate, "month")
   stat['value'] <- 1
   
   stat_aggr <- stat %>%                         # Aggregate data
@@ -172,14 +186,126 @@ get_Actual_by_month <- function(df) {
     dplyr::summarize(value  = sum(value )) %>% 
     as.data.frame()
   
-  fig <- plot_ly(
+  fig2 <- plot_ly(
     x = stat_aggr$year_month,
     y = stat_aggr$value,
     name = "Projected Completion By Month",
-    type = "bar"
-  )
+    type = "bar",
+    showlegend = FALSE
+  ) %>% layout(xaxis = list(dtick = "M1"))
   
+  stat2 <- df
+  stat2$year_month <- floor_date(stat2$IMO_ActualEndDate, "month")
+  stat2['value'] <- 1
+  
+  stat_aggr2 <- stat2 %>%                         # Aggregate data
+    group_by(year_month) %>% 
+    dplyr::summarize(value  = sum(value )) %>% 
+    as.data.frame()
+  
+  fig3 <- plot_ly(
+    x = stat_aggr$year_month,
+    y = stat_aggr$value,
+    name = "Actual Completion By Month",
+    type = "bar",
+    showlegend = FALSE
+  ) %>% layout(xaxis = list(dtick = "M1"))
+  
+  annotations = list( 
+    list( 
+      x = 0.1,  
+      y = 1.0,  
+      text = "Overall IMOs Achieved vs Outstanding",  
+      xref = "paper",  
+      yref = "paper",  
+      xanchor = "center",  
+      yanchor = "bottom",  
+      showarrow = FALSE 
+    ),  
+    list( 
+      x = 0.5,  
+      y = 1.0,  
+      text = "Projected IMO Completion By Month",  
+      xref = "paper",  
+      yref = "paper",  
+      xanchor = "center",  
+      yanchor = "bottom",  
+      showarrow = FALSE 
+    ), 
+    list( 
+      x = 0.9,  
+      y = 1,  
+      text = "Actual IMO Completion By Month",  
+      xref = "paper",  
+      yref = "paper",  
+      xanchor = "center",  
+      yanchor = "bottom",  
+      showarrow = FALSE 
+    ))
+  
+  fig4 <- subplot(fig1, fig2, fig3) %>% layout(annotations = annotations) 
+  
+  return(fig4)
+}
+
+get_current_status <- function(df) {
+  incomp <- df[which(df$IMO_OverallStat == "Incomplete"),]
+  otHigher <- nrow(incomp[which(incomp$IMO_Stat == 1),])
+  otStaff <- nrow(incomp[which(incomp$IMO_Stat == 2),])
+  otSec <- nrow(incomp[which(incomp$IMO_Stat == 3),])
+  onT <- nrow(incomp[which(incomp$IMO_Stat == 4),])
+  ns <- nrow(incomp[which(incomp$IMO_Stat == 0),])
+  
+  labels = c('Off Track (higher Assistance)','Off Track (staff Assistance)', 'Off Track (internal)', 'On Track', 'Not Started/removed')
+  values = c(otHigher, otStaff, otSec, onT, ns)
+  
+  fig <- plot_ly(type='pie', labels=labels, values=values, 
+                  textinfo='label+percent',
+                  insidetextorientation='radial',
+                  showlegend = TRUE,
+                  textposition = 'inside') %>% layout(title = "Status of Outstanding IMOs") 
   return(fig)
+}
+
+get_otHigher <- function(df) {
+  incomp <- df[which(df$IMO_OverallStat == "Incomplete"),]
+  otHigher <- incomp[which(incomp$IMO_Stat == 1),]
+  retdf <- select(otHigher,c("IMO_ID","IMO_Name","IMO_Owner","IMO_LOE","IMO_SubLOE","IMO_ProposedEndDate"))
+  retdf %>% arrange(retdf$IMO_ProposedEndDate)
+  return(retdf)
+}
+
+get_otStaff <- function(df) {
+  incomp <- df[which(df$IMO_OverallStat == "Incomplete"),]
+  otHigher <- incomp[which(incomp$IMO_Stat == 2),]
+  retdf <- select(otHigher,c("IMO_ID","IMO_Name","IMO_Owner","IMO_LOE","IMO_SubLOE","IMO_ProposedEndDate"))
+  retdf %>% arrange(retdf$IMO_ProposedEndDate)
+  return(retdf)
+}
+
+get_otSec <- function(df) {
+  incomp <- df[which(df$IMO_OverallStat == "Incomplete"),]
+  otHigher <- incomp[which(incomp$IMO_Stat == 3),]
+  retdf <- select(otHigher,c("IMO_ID","IMO_Name","IMO_Owner","IMO_LOE","IMO_SubLOE","IMO_ProposedEndDate"))
+  retdf %>% arrange(retdf$IMO_ProposedEndDate)
+  return(retdf)
+}
+
+get_onT <- function(df) {
+  incomp <- df[which(df$IMO_OverallStat == "Incomplete"),]
+  otHigher <- incomp[which(incomp$IMO_Stat == 4),]
+  retdf <- select(otHigher,c("IMO_ID","IMO_Name","IMO_Owner","IMO_LOE","IMO_SubLOE","IMO_ProposedEndDate"))
+  retdf %>% arrange(retdf$IMO_ProposedEndDate)
+  return(retdf)
+}
+
+get_NS <- function(df) {
+  incomp <- df[which(df$IMO_OverallStat == "Incomplete"),]
+  otHigher <- incomp[which(incomp$IMO_Stat == 0),]
+  retdf <- select(otHigher,c("IMO_ID","IMO_Name","IMO_Owner","IMO_LOE","IMO_SubLOE","IMO_ProposedEndDate"))
+  #retdf <- retdf[rev(order(as.Date(retdf$IMO_ProposedEndDate))),]
+  retdf %>% arrange(retdf$IMO_ProposedEndDate)
+  return(retdf)
 }
 
 get_dep <- function(df) {
