@@ -55,5 +55,15 @@
   left: 0;
   bottom: 0;
   right: 0;
-  padding-bottom: 100px;
+}
+
+.menu_item {
+  font-size: 10px;
+  text-align: left;
+  align-content: flex-start;
+  margin: 20;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
