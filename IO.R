@@ -1,5 +1,14 @@
 
 library(jsonlite)
+library(openxlsx)
+library(tools)
+
+# proper headers for Data Columns
+dataHeaders <- c("IMO_ID","IMO_Name","IMO_Owner","IMO_LOE","IMO_SubLOE",
+                 "IMO_Color","IMO_Dep","IMO_Desciption","IMO_Conditions", 
+                 "IMO_ConStat", "IMO_Stat", "IMO_Stat", "IMO_OverallStat", 
+                 "IMO_SupportedOBJ", "IMO_StartDate", "IMO_ProposedEndDate", 
+                 "IMO_ActualEndDate")
 
 # created dummy data frame for testing
 TestCampdata <- data.frame(
@@ -60,4 +69,90 @@ read_data <- function(filename) {
   #need to check if filename is string
   df <- as.data.frame(jsonlite::fromJSON(filename)) 
   return(df)
+}
+
+
+# function for importing an excel spreadsheet into a dataframe
+upload_excel <- function(filename) {
+  out <- tryCatch(
+    {
+      # check if the file has excel extension
+      print(filename)
+      if(file_ext(filename) != "xlsx"){
+        stop("File missing xlsx extension")
+      }
+      
+
+      df <- read.xlsx( filename, 1, startRow = 1, 
+                             colNames = TRUE, rowNames = FALSE, 
+                             detectDates = TRUE, skipEmptyRows = TRUE, 
+                             skipEmptyCols = TRUE, rows = NULL, cols = NULL, 
+                             na.strings = "NA",)
+      sapply(df, class)
+      
+      #check if column headers are correct
+      for(column_header in dataHeaders){
+        if(! any(grepl(column_header,colnames(df)))){
+          stop(paste0("Missing column header:", column_header,"\n"))
+        } 
+      }
+      
+      if(typeof(df$IMO_StartDate) != "double"){
+        #covert to date number
+        df$IMO_StartDate <- convertToDate(df$IMO_StartDate)
+      }
+      
+      if(typeof(df$IMO_ProposedEndDate) != "double"){
+        #covert to date number
+        df$IMO_ProposedEndDate <- convertToDate(df$IMO_ProposedEndDate)
+      }
+      
+      if(typeof(df$IMO_ActualEndDate) != "double"){
+        #covert to date number
+        df$IMO_ActualEndDate <- convertToDate(df$IMO_ActualEndDate)
+      }
+      
+      return(df)
+      
+    },
+    error=function(cond) {
+      message("Excel not imported due to the following Error:")
+      message(cond)
+      return(NA)
+    }
+  )
+}
+
+# function for exporting a dataframe as an excel spreadsheet
+export_excel <- function(df, filename) {
+
+  #
+  out <- tryCatch(
+    {
+      # check if input is a dataframe
+      if (typeof(df) != "list"){
+        stop("Need to pass a vaild data frame to the function export_excel")
+      }
+      
+      #check if column headers are correct
+      for(column_header in dataHeaders){
+        if(! any(grepl(column_header,colnames(df)))){
+          stop(paste0("Missing column header:", column_header,"\n"))
+        } 
+      }
+      
+      #check if writing a file ending in xlsx
+      if(file_ext(filename) != "xlsx"){
+        filename <- paste0(filename,".xlsx")
+      }
+      
+      # write dataframe to excel
+      write.xlsx(df, filename, overwrite = TRUE)
+      
+    },
+    error=function(cond) {
+      message("Excel not exported due to the following Error:")
+      message(cond)
+    }
+  )    
 }
