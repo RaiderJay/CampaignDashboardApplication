@@ -90,7 +90,7 @@ upload_excel <- function(filename) {
                              na.strings = "NA",)
       sapply(df, class)
       
-      #check if column headers are correct
+      #check if column headers are correct @future need to check higher data as well
       for(column_header in dataHeaders){
         if(! any(grepl(column_header,colnames(df)))){
           stop(paste0("Missing column header:", column_header,"\n"))
@@ -134,7 +134,7 @@ export_excel <- function(df, filename) {
         stop("Need to pass a vaild data frame to the function export_excel")
       }
       
-      #check if column headers are correct
+      #check if column headers are correct @future need to check higher data as well
       for(column_header in dataHeaders){
         if(! any(grepl(column_header,colnames(df)))){
           stop(paste0("Missing column header:", column_header,"\n"))

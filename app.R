@@ -19,7 +19,10 @@ source("./Utility.R")
 
 ## get relevent non-plot related data move to utility in future or make class
 
-Campdata <- TestCampdata
+#Campdata <- TestCampdata
+
+#export_excel(Campdata, "./data/TestCampdata.xlsx")
+Campdata <- upload_excel("./data/TestCampdata.xlsx")
 
 stats <- get_camp_stats(Campdata)
 
